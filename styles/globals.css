@@ -15,11 +15,11 @@
   }
 
   .btn-menu {
-    @apply flex gap-6 items-center px-6 py-4 hover:bg-gray-100 transition rounded-md;
+    @apply flex gap-6 items-center px-6 py-4 transition rounded-md;
   }
 
   .btn-primary {
-    @apply bg-emerald-600 hover:bg-emerald-700 hover:border-emerald-700 border-emerald-600 font-medium;
+    @apply bg-emerald-600 dark:bg-primary-500 hover:bg-emerald-700 hover:border-emerald-700 border-emerald-600 dark:border-primary-500 dark:hover:bg-primary-600 dark:hover:border-primary-600 font-medium;
   }
 
   .btn {
