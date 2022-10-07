@@ -1,10 +1,12 @@
 // Importaciones
 import Image from 'next/image'
 
+//Importaciones de Componentes
+import { ButtonMenu } from '../../components/ButtonMenu';
+
 // Imagenes
 import iteshuLogo from '../../assets/img/iteshuLogo.png'
 import servicioSocialLogo from '../../assets/img/servicioSocialLogo.png'
-import { ButtonMenu } from '../../components/ButtonMenu';
 
 //Iconos
 import { Squares2X2Icon } from '@heroicons/react/24/outline'
@@ -63,6 +65,8 @@ export const MainLayout = ({ children }) => {
                 {/* Header */}
                 <div className="ml-0 transition md:ml-72">
                     <header className="flex items-center justify-end w-full px-8 bg-white dark:bg-slate-900 dark:border-gray-700 border-b h-16">
+
+                        {/* Botón de Menu Responsive */}
                         <button className="block btn btn-light md:hidden">
                             <span className="sr-only">Menu</span>
                             <svg
@@ -81,11 +85,14 @@ export const MainLayout = ({ children }) => {
 
                         <div className="flex items-center gap-6 text-gray-800 dark:text-slate-100">
 
+                            {/* Toggle Dark Mode */}
                             <DarkModeToggle />
 
                             {/* Foto y Nombre del Usuario */}
                             <div className="flex items-center gap-4">
                                 <div className="avatar order-2">
+
+                                    {/* Foto del Usuario */}
                                     <div className="w-8">
                                         <Image
                                             className='rounded-full'
@@ -96,11 +103,17 @@ export const MainLayout = ({ children }) => {
                                         />
                                     </div>
                                 </div>
+
+                                {/* Nombre del Usuario */}
                                 <span className="text-sm font-medium order-1">Nombre del Usuario</span>
                                 <div className="dropdown dropdown-hover dropdown-end order-3">
+
+                                    {/* Botón de Dropdown */}
                                     <button tabIndex={0} className='btn btn-ghost p-3'>
                                         <ChevronDownIcon className="w-5 h-5 order-3 cursor-pointer" />
                                     </button>
+
+                                    {/* Dropdown Menu */}
                                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-white dark:bg-slate-700 rounded-box w-52">
                                         <li>
                                             <button className='btn btn-ghost'>
@@ -115,6 +128,7 @@ export const MainLayout = ({ children }) => {
                         </div>
                     </header>
 
+                    {/* Contenido */}
                     <div className="p-5">
                         {children}
                     </div>

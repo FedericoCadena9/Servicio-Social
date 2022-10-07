@@ -8,9 +8,12 @@ import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'
 
 export const DarkModeToggle = () => {
 
+    // Hook para cambiar el tema, representa el tema actual
     const { theme, setTheme } = useTheme();
+
     const [mounted, setMounted] = useState(false);
 
+    // Use Effect para resolver el error de que el componente se renderiza antes de que el hook useTheme se ejecute
     useEffect(() => setMounted(true), []);
     if (!mounted) return null;
 
