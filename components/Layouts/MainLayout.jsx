@@ -49,7 +49,7 @@ export const MainLayout = ({ children }) => {
                         <ButtonMenu href={'/'} text="Dependencias" icon={<Squares2X2Icon className="w-5 h-5" />} />
                         <ButtonMenu href={'/documentos'} text="Documentos" icon={<DocumentTextIcon className="w-5 h-5" />} />
                         <ButtonMenu href={'/alumnos'} text="Alumnos" icon={<AcademicCapIcon className="w-5 h-5" />} />
-                        <ButtonMenu href={'/usuarios'} text="Usuarios" icon={<UsersIcon className="w-5 h-5" />} />
+                        <ButtonMenu href={'/users'} text="Usuarios" icon={<UsersIcon className="w-5 h-5" />} />
                     </nav>
 
                     {/* Botón de Ayuda */}
