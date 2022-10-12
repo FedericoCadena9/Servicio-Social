@@ -19,7 +19,7 @@ const Users = () => {
             {/* Diseño del contenido de la tabla */}
             <table class="w-full text-sm text-left text-gray-800 ">
                 {/* Cabecera de la tabla */}
-                <thead class="text-sm uppercase bg-gray-200 text-black border border-gray-400">
+                <thead class="text-sm uppercase bg-gray-200 text-black border border-gray-200">
                     <tr>
                         <th scope='col' class="py-4 px-2">
                             <div class="flex items-center pl-2 rounded">
