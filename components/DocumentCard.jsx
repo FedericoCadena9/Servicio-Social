@@ -30,7 +30,7 @@ export const DocumentCard = () => {
                     <h5 class="mt-3 font-medium text-gray-900 dark:text-white">Nombre_del_documento.pdf </h5>
                 </div>
 
-                <div className='border-t text-xs p-6'>
+                <div className='border-t dark:border-gray-700 text-xs p-6'>
                     <p className='font-medium text-gray-800 dark:text-gray-200'>Tamaño del Archivo</p>
                     <p className='text-gray-500 dark:text-gray-600'>1.76 MB</p>
                 </div>
