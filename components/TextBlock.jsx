@@ -7,7 +7,7 @@ export const TextBlock = ({ title, subtitle, children }) => {
             </div>
 
             {/* Contenido para botones */}
-            <div className="">
+            <div className="flex items-center gap-4">
                 {children}
             </div>
         </div>
