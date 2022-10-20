@@ -1,137 +1,106 @@
-import React from 'react'
+// Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from '../components/TextBlock'
-import { TrashIcon } from '@heroicons/react/24/solid';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Modal } from '../components/Modal';
+import Pagination from '../components/Pagination';
+
+//Iconos
+import { TrashIcon, PencilSquareIcon, MagnifyingGlassIcon, FunnelIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 
 const Users = () => {
-  return (
-    <MainLayout>
-        {/* Titulo y contenido */}
-        <TextBlock title={'Usuarios'} subtitle={'Todos los usuarios registrados tendrán acceso al panel.'}>
-            <Modal></Modal>
-        </TextBlock>
-        {/* Tabla de usuarios */}
-        <div className="overflow-x-auto relative mt-8 justify-center">
-            {/* Diseño del contenido de la tabla */}
-            <table className="w-full text-sm text-left text-gray-800 dark:text-gray-600 dark:bg-gray-100">
-                {/* Cabecera de la tabla */}
-                <thead className="text-sm uppercase bg-gray-200 dark:bg-gray-700 text-black border dark:text-white border-gray-200 dark:border-gray-600">
-                    <tr>
-                        <th scope='col' className="py-4 px-2">
-                            <div className="flex items-center pl-2 rounded">
-                                <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 focus:ring-blue-500 dark:focus:ring-blue-600 ring-offset-gray-600 focus:ring-2"/>
+    return (
+        <MainLayout>
+
+            {/* Titulo y contenido */}
+            <TextBlock title={'Usuarios'} subtitle={'Todos los usuarios registrados tendrán acceso al panel.'}>
+                <Modal />
+            </TextBlock>
+
+            <div className=" w-full px-8 mt-10 ">
+                <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
+
+                    {/* Filtros */}
+                    <div>
+                        <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                            <FunnelIcon className="mr-2 w-4 h-4 text-gray-400" />
+                            Filtros
+                            <ChevronDownIcon className="w-4 h-4 ml-2" />
+                        </button>
+                        <div id="dropdownAction" className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom">
+                            <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
+                                <li>
+                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a>
+                                </li>
+                                <li>
+                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a>
+                                </li>
+                                <li>
+                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate account</a>
+                                </li>
+                            </ul>
+                            <div className="py-1">
+                                <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete User</a>
                             </div>
-                        </th>
-                        <th scope="col" className="py-4 px-6">
-                            Nombre
-                        </th>
-                        <th scope="col" className="py-4 px-6">
-                            Correo
-                        </th>
-                        <th scope="col" className="py-4 px-6">
-                            Rol
-                        </th>
-                        <th scope="col" className="py-4 px-6">
-                            Acción
-                        </th>
-                    </tr>
-                </thead>
-                {/* Cuerpo de la tabla */}
-                <tbody>
-                    {/* Diseño de fondo y borde */}
-                    <tr className="border bg-gray-100 dark:bg-gray-300 border-gray-400 dark:border-gray-400">
-                        {/* 1ra fila */}
-                        <th scope="row" className="py-3 px-2">
-                            <div className="flex items-center pl-2 rounded">
-                                <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2"/>
+                        </div>
+                    </div>
+
+                    {/* Buscador */}
+                    <label htmlFor="table-search" className="sr-only">Buscar</label>
+                    <div className="relative">
+                        <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                        </div>
+                        <input type="search" id="table-search-users" className="block p-2.5 pl-10 w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
+                    </div>
+                </div>
+
+                {/* Tabla */}
+                <div className="">
+                    <div className="flex flex-col">
+                        <div className="overflow-x-auto">
+                            <div className="inline-block min-w-full py-2 align-middle px-1">
+                                <div className="relative overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                                    <table className="min-w-full table-auto divide-y divide-gray-300 dark:divide-gray-500 text-gray-600 dark:text-gray-400 text-sm">
+                                        <thead className="bg-gray-50 dark:bg-gray-700 dark:text-gray-300 text-gray-900 text-sm">
+                                            <tr>
+                                                <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
+                                                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                </th>
+                                                <th scope="col" className="py-3.5 pr-3 text-left font-semibold">Nombre</th>
+                                                <th scope="col" className="px-3 py-3.5 text-left font-semibold ">Correo Electrónico</th>
+                                                <th scope="col" className="px-3 py-3.5 text-left font-semibold">Rol</th>
+                                                <th scope="col" className="px-3 py-3.5 text-left font-semibold">Acción</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200 bg-white">
+                                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
+                                                <td className="relative w-12 px-6 sm:w-16 sm:px-8">
+                                                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                </td>
+                                                <td className="whitespace-nowrap py-4 pr-3">Federico Cadena</td>
+                                                <td className="whitespace-nowrap px-3 py-4 ">a19021029@iteshu.edu.mx</td>
+                                                <td className="whitespace-nowrap px-3 py-4 ">
+                                                    <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
+                                                        Administrador
+                                                    </span>
+                                                </td>
+                                                <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
+                                                    <TrashIcon className="w-5 h-5" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </th>
-                        <td className="py-3 px-6" type="text">
-                            Federico Cadena
-                        </td>
-                        <td className="py-3 px-6" type="email">
-                            a19021089@iteshu.edu.mx
-                        </td>
-                        <td className="py-3 px-6">
-                            Editor
-                        </td>
-                        <th scope='row' className="py-3 px-6 dark:text-gray-800">
-                            <TrashIcon className='w-5 h-5 mx-3'/>
-                        </th>
-                    </tr>
-                    {/* Diseño de fondo y borde */}
-                    <tr className="border bg-gray-100 dark:bg-gray-300 border-gray-400 dark:border-gray-400">
-                        {/* 2da fila */}
-                        <th scope="row" className="py-3 px-2">
-                            <div className="flex items-center pl-2 rounded">
-                                <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2"/>
-                            </div>
-                        </th>
-                        <td className="py-3 px-6" type="text">
-                            Guadalupe Contador
-                        </td>
-                        <td className="py-3 px-6" type="email">
-                            a19021029@iteshu.edu.mx
-                        </td>
-                        <td className="py-3 px-6">
-                            Editor
-                        </td>
-                        <th scope="row" className="py-3 px-6 dark:text-gray-800">
-                            <TrashIcon className='w-5 h-5 mx-3'/>
-                        </th>
-                    </tr>
-                    {/* Diseño de fondo y borde */}
-                    <tr className="border bg-gray-100 dark:bg-gray-300 border-gray-400 dark:border-gray-400">
-                        {/* 3ra fila */}
-                        <th scope="row" className="py-3 px-2">
-                            <div className="flex items-center pl-2 rounded">
-                                <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2"/>
-                            </div>
-                        </th>
-                        <td className="py-3 px-6" type="text">
-                            Alba Mendoza
-                        </td>
-                        <td className="py-3 px-6" type='email'>
-                            amendoza@iteshu.edu.mx
-                        </td>
-                        <td className="py-3 px-6">
-                            Editor
-                        </td>
-                        <th scope="row" className="py-3 px-6 dark:text-gray-800">
-                            <TrashIcon className='w-5 h-5 mx-3'/>
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        {/* Texto de cantidad de registros */}
-        <div className='w-400 h-12 text-sm ml-20 mr-48 mt-6 items-center justify-center flex'>
-            <div className=' text-gray-600 dark:text-gray-300'>Mostrando 
-                <span className='text-black dark:text-white font-bold'> 3 </span>
-                de 
-                <span className='text-black dark:text-white font-bold'> 10 </span>
-                de 
-                <span className='text-black dark:text-white font-bold'> 100 </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        {/* Botones */}
-        <div className='ml-80 flex'>
-            {/* Boton anterior */}
-            <button className='w-36 h-10 flex mt-6 text-gray-800 dark:text-gray-300 text-sm border border-gray-400 rounded-lg justify-center items-center'>
-                <ChevronLeftIcon className="w-6 h-6" />
-                Anterior
-            </button>
-            {/* Boton siguiente */}
-            <button className='w-36 h-10 flex ml-5 mt-6 text-gray-800 dark:text-gray-300 text-sm border border-gray-400 rounded-lg justify-center items-center'>
-                Siguiente
-                <ChevronRightIcon className="w-6 h-6"/>
-            </button>
-        </div>
-    </MainLayout>
-  )
+
+            <Pagination />
+        </MainLayout>
+    )
 }
 
 export default Users
