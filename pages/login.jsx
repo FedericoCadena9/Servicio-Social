@@ -30,28 +30,24 @@ const Login = () => {
                         />
                     </div>
                 </div>
-                <div className="w-full  mx-auto max-w-2xl mt-28 space-y-6">
+                <div className="w-full flex flex-col items-start mx-auto max-w-md mt-28 space-y-6 gap-4">
                     {/*Texto contenido*/}
-                    <div className="">
-                        <h1 className='text-primary-500 dark:text-primary-600 font-bold text-4xl ml-20 mr-40 mt-16'>Departamento de Convenios y Gestión de Proyectos</h1>
-                        <p className=' text-gray-400 dark:text-gray-500 text-lg ml-20 mr-48 mt-5'>¡Bienvenido de vuelta! Inicia sesión con Google para continuar.</p>
+                    <div className='space-y-6'>
+                        <h1 className='text-primary-500 dark:text-primary-600 font-bold text-4xl'>Departamento de Convenios y Gestión de Proyectos</h1>
+                        <p className=' text-gray-400 dark:text-gray-500 text-lg'>¡Bienvenido de vuelta! Inicia sesión con Google para continuar.</p>
                     </div>
                     {/*Boton Google*/}
                     <Link href={'/'}>
-                        <button className='w-96 h-12 font-Poppins gap-10 flex ml-20 mt-0 border border-gray-300 dark:border-gray-400 items-center justify-center'>
-                            {/*Logo de Google*/}
-                            <div className='flex px-18 py-18'>
-                                <div className="relative w-8 h-8 ">
-                                    <Image
-                                        layout="fill"
-                                        objectFit="cover"
-                                        alt="Google Logo"
-                                        src={logoGoogle}
-                                    />
-                                </div>
+                        <button className='flex rounded shadow border-gray-200 border px-12 py-3 w-full font-medium text-gray-700 items-center gap-4 justify-center transition hover:shadow-md hover:bg-slate-50/60'>
+                            <div className="relative w-6 h-6 ">
+                                <Image
+                                    layout="fill"
+                                    objectFit="cover"
+                                    alt="Google Logo"
+                                    src={logoGoogle}
+                                />
                             </div>
-                            {/* Texto */}
-                            Inicia Sesión con Google
+                            <span> Inicia Sesión con Google </span>
                         </button>
                     </Link>
                 </div>

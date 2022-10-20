@@ -1,9 +1,10 @@
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from "../components/TextBlock";
+import Pagination from "../components/Pagination";
 
 // Iconos
-import { ChevronLeftIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
 const Alumnos = () => {
   return (
@@ -18,16 +19,19 @@ const Alumnos = () => {
           </button>
         </TextBlock>
 
-        {/* Tabla */}
 
         <div className=" w-full px-8 mt-10 ">
           <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
+
+            {/* Filtros */}
             <div>
               <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
                 <FunnelIcon className="mr-2 w-4 h-4 text-gray-400" />
                 Filtros
                 <ChevronDownIcon className="w-4 h-4 ml-2" />
               </button>
+
+              {/* Dropdown de Filtros */}
               <div id="dropdownAction" className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom">
                 <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
                   <li>
@@ -45,6 +49,8 @@ const Alumnos = () => {
                 </div>
               </div>
             </div>
+
+            {/* Input de Buscar */}
             <label htmlFor="table-search" className="sr-only">Buscar</label>
             <div className="relative">
               <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -52,7 +58,10 @@ const Alumnos = () => {
               </div>
               <input type="search" id="table-search-users" className="block p-2.5 pl-10 w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
             </div>
+
           </div>
+
+          {/* Tabla */}
           <div className="">
             <div className="flex flex-col">
               <div className="overflow-x-auto">
@@ -86,7 +95,7 @@ const Alumnos = () => {
                           <td className="whitespace-nowrap px-8 py-4 ">a19021089@iteshu.edu.mx</td>
                           <td className="whitespace-nowrap px-8 py-4 ">Sistemas Computacionales</td>
                           <td className="whitespace-nowrap px-8 py-4 ">Masculino</td>
-                          
+
                           <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
                             <PencilSquareIcon className="w-5 h-5" />
                             <TrashIcon className="w-5 h-5" />
@@ -103,22 +112,7 @@ const Alumnos = () => {
         </div>
 
 
-        <div className="flex flex-col items-center mt-10">
-          <span className="text-sm text-gray-700 dark:text-gray-400">
-            Mostrando <span className="font-semibold text-gray-900 dark:text-white">1</span> de <span className="font-semibold text-gray-900 dark:text-white">10</span> de <span className="font-semibold text-gray-900 dark:text-white">100</span> entradas
-          </span>
-          <div className="inline-flex mt-2 xs:mt-0 space-x-2">
-            <button className="btn-pagination">
-              <ChevronLeftIcon className="w-5 h-5" />
-              <span>Anterior</span>
-            </button>
-            <button className="btn-pagination">
-              <span>Siguiente</span>
-              <ChevronRightIcon className="w-5 h-5" />
-
-            </button>
-          </div>
-        </div>
+        <Pagination />
 
 
       </MainLayout>

@@ -22,6 +22,8 @@ export const MainLayout = ({ children }) => {
     return (
         <div className='font-primary transition-all'>
             <div className="min-h-screen bg-white dark:bg-gray-900">
+
+                {/* Siderbar */}
                 <nav className="fixed top-0 left-0 z-20 h-full bg-slate-50 dark:bg-slate-800 dark:border-slate-700 pb-10 overflow-x-hidden overflow-y-auto transition origin-left transform border-r w-72 md:translate-x-0">
                     <div className="flex items-center justify-between px-7 py-8">
 

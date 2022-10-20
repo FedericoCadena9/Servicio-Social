@@ -12,16 +12,21 @@ const Documentos = () => {
       <MainLayout>
         <div className="grid grid-cols-9 min-h-screen">
           <div className="col-span-6">
+
+            {/* Titulo */}
             <TextBlock title={'Documentos'} subtitle={'5 documentos encontrados'} />
 
+
+            {/* Documentos */}
             <div className="flex items-center justify-center gap-8 flex-wrap my-6">
               <DocumentCard />
               <DocumentCard />
               <DocumentCard />
               <DocumentCard />
-
             </div>
           </div>
+
+          {/* Rightbar */}
           <div className="sticky max-h-screen p-8 pt-12 bg-white dark:bg-gray-900 w-[25rem] top-0 right-0 border-l dark:border-gray-700">
             <h2 className="text-lg text-gray-900 dark:text-gray-100 font-medium">Previsualización del Archivo</h2>
 

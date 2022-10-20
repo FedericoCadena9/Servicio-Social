@@ -1,6 +1,3 @@
-//Importaciones
-
-
 //Importaciones de Componentes
 import { Input } from "../components/Input";
 import { MainLayout } from "../components/Layouts/MainLayout";
@@ -12,11 +9,17 @@ const agregarDependencia = () => {
         <>
             <MainLayout>
                 <div className="relative">
+
+                    {/* Titulo y Botones */}
                     <div className="sticky top-0 bg-white">
                         <TextBlock title={'Nueva Dependencia'} subtitle={'Agrega la información proporcionada a partir del F1.'}>
+
+                            {/* Boton Cancelar */}
                             <button className="btn btn-outline">
                                 <span>Cancelar</span>
                             </button>
+
+                            {/* Boton Guardar */}
                             <button className='btn btn-primary'>
                                 <span>Guardar</span>
                             </button>
@@ -25,7 +28,6 @@ const agregarDependencia = () => {
 
                     <div className="w-full mx-auto max-w-4xl mt-8">
                         <div className="border border-gray-300 rounded-md p-6">
-
                             <form>
                                 {/* Clave del Programa */}
                                 <Input id={'clave-programa'} label={'Clave del Programa'} placeholder={'Clave del Programa'} type={'text'} />
@@ -50,8 +52,8 @@ const agregarDependencia = () => {
                                 <Input id={'nombre-programa'} label={'Nombre del Programa'} placeholder={'Nombre del Programa'} type={'text'} />
 
                                 {/* Objetivo */}
-                                <div class="mb-6 w-full">
-                                    <label for="objetivo" class="label-input">Objetivo</label>
+                                <div className="mb-6 w-full">
+                                    <label for="objetivo" className="label-input">Objetivo</label>
                                     <textarea placeholder="Definir el Objetivo" className="input-form" name="objetivo" id="objetivo" cols="30" rows="10"></textarea>
                                 </div>
 
