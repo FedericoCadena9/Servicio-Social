@@ -1,13 +1,16 @@
+// Importaciones
+import { getSession } from 'next-auth/react'
+
 //Importaciones de Componentes
 import { Input } from "../components/Input";
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from "../components/TextBlock";
 
-const agregarDependencia = () => {
+const agregarDependencia = ({ session }) => {
 
     return (
         <>
-            <MainLayout>
+            <MainLayout name={session.user.name} img={session.user.image}>
                 <div className="relative">
 
                     {/* Titulo y Botones */}
@@ -74,6 +77,25 @@ const agregarDependencia = () => {
             </MainLayout>
         </>
     )
+}
+
+// GetServerSideProps
+export const getServerSideProps = async (context) => {
+
+    const session = await getSession(context);
+
+    if (!session) return {
+        redirect: {
+            destination: '/login',
+            permanent: false
+        }
+    }
+
+    return {
+        props: {
+            session
+        }
+    }
 }
 
 export default agregarDependencia

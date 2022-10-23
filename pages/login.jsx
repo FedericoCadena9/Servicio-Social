@@ -1,13 +1,21 @@
-import React from 'react'
-{/*Libreria para agregar imagen*/ }
+//Importaciones
 import Image from 'next/image'
-{/*Librerias de logos*/ }
+import { signIn, useSession } from 'next-auth/react'
+import router from 'next/router'
+
+// Logos
 import iteshuLogo from '../assets/img/iteshuLogo.png'
 import servicioSocialLogo from '../assets/img/servicioSocialLogo.png'
 import logoGoogle from '../assets/img/logoGoogle.png'
-import Link from 'next/link'
 
 const Login = () => {
+
+    const { data: session, status } = useSession()
+
+    if (status !== 'loading' && status === 'authenticated') {
+        router.push('/')
+    }
+
     return (
         <div className='grid grid-cols-12 w-full h-screen bg-white dark:bg-slate-900'>
             <div className='col-span-6'>
@@ -36,20 +44,19 @@ const Login = () => {
                         <h1 className='text-primary-500 dark:text-emerald-600 font-bold text-4xl'>Departamento de Convenios y Gestión de Proyectos</h1>
                         <p className=' text-gray-400 text-lg'>¡Bienvenido de vuelta! Inicia sesión con Google para continuar.</p>
                     </div>
+                    
                     {/*Boton Google*/}
-                    <Link href={'/'}>
-                        <button className='flex rounded shadow border-gray-200 dark:border-gray-600 border px-12 py-3 w-full font-medium text-gray-700 dark:text-gray-100 items-center gap-4 justify-center transition hover:shadow-md hover:bg-slate-50/60 dark:hover:bg-gray-700/40'>
-                            <div className="relative w-6 h-6 ">
-                                <Image
-                                    layout="fill"
-                                    objectFit="cover"
-                                    alt="Google Logo"
-                                    src={logoGoogle}
-                                />
-                            </div>
-                            <span> Inicia Sesión con Google </span>
-                        </button>
-                    </Link>
+                    <button onClick={() => signIn('google')} className='flex rounded shadow border-gray-200 dark:border-gray-600 border px-12 py-3 w-full font-medium text-gray-700 dark:text-gray-100 items-center gap-4 justify-center transition hover:shadow-md hover:bg-slate-50/60 dark:hover:bg-gray-700/40'>
+                        <div className="relative w-6 h-6 ">
+                            <Image
+                                layout="fill"
+                                objectFit="cover"
+                                alt="Google Logo"
+                                src={logoGoogle}
+                            />
+                        </div>
+                        <span> Inicia Sesión con Google </span>
+                    </button>
                 </div>
             </div>
             <div className='col-span-6 bg-slate-100 dark:bg-slate-800 flex items-center justify-center relative'>

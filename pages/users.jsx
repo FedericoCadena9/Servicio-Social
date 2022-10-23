@@ -1,3 +1,6 @@
+// Importaciones
+import { getSession } from 'next-auth/react'
+
 // Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from '../components/TextBlock'
@@ -7,9 +10,9 @@ import Pagination from '../components/Pagination';
 //Iconos
 import { TrashIcon, PencilSquareIcon, MagnifyingGlassIcon, FunnelIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 
-const Users = () => {
+const Users = ({ session }) => {
     return (
-        <MainLayout>
+        <MainLayout name={session.user.name} img={session.user.image}>
 
             {/* Titulo y contenido */}
             <TextBlock title={'Usuarios'} subtitle={'Todos los usuarios registrados tendrán acceso al panel.'}>
@@ -103,4 +106,22 @@ const Users = () => {
     )
 }
 
+// GetServerSideProps
+export const getServerSideProps = async (context) => {
+
+    const session = await getSession(context);
+
+    if (!session) return {
+        redirect: {
+            destination: '/login',
+            permanent: false
+        }
+    }
+
+    return {
+        props: {
+            session
+        }
+    }
+}
 export default Users

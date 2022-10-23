@@ -1,5 +1,6 @@
 // Importaciones
 import Image from 'next/image'
+import { signOut } from 'next-auth/react';
 
 //Importaciones de Componentes
 import { ButtonMenu } from '../../components/ButtonMenu';
@@ -18,7 +19,7 @@ import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { DarkModeToggle } from '../DarkModeToggle';
 
-export const MainLayout = ({ children }) => {
+export const MainLayout = ({ children, img, name }) => {
     return (
         <div className='font-primary transition-all'>
             <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -101,13 +102,13 @@ export const MainLayout = ({ children }) => {
                                             layout="fill"
                                             objectFit="cover"
                                             alt="Foto de Perfil"
-                                            src="https://source.unsplash.com/photo-1616166330079-8b2b2b2b2b2b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+                                            src={img}
                                         />
                                     </div>
                                 </div>
 
                                 {/* Nombre del Usuario */}
-                                <span className="text-sm font-medium order-1">Nombre del Usuario</span>
+                                <span className="text-sm font-medium order-1">{name}</span>
                                 <div className="dropdown dropdown-hover dropdown-end order-3">
 
                                     {/* Botón de Dropdown */}
@@ -118,7 +119,7 @@ export const MainLayout = ({ children }) => {
                                     {/* Dropdown Menu */}
                                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-white dark:bg-slate-700 rounded-box w-52">
                                         <li>
-                                            <button className='btn btn-ghost'>
+                                            <button className='btn btn-ghost' onClick={() => signOut()} >
                                                 <ArrowLeftOnRectangleIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                                                 <span className="ml-2 text-gray-900 dark:text-slate-100">Cerrar Sesión</span>
                                             </button>

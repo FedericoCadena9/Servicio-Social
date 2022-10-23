@@ -1,3 +1,6 @@
+// Importaciones
+import { getSession } from 'next-auth/react'
+
 // Importaciones de Componentes
 import { DocumentCard } from "../components/DocumentCard";
 import { MainLayout } from "../components/Layouts/MainLayout";
@@ -6,10 +9,10 @@ import { TextBlock } from "../components/TextBlock";
 //Iconos
 import { DocumentTextIcon } from '@heroicons/react/24/solid'
 
-const Documentos = () => {
+const Documentos = ({ session }) => {
   return (
     <>
-      <MainLayout>
+      <MainLayout name={session.user.name} img={session.user.image}>
         <div className="grid grid-cols-9 min-h-screen">
           <div className="col-span-6">
 
@@ -50,5 +53,24 @@ const Documentos = () => {
     </>
   );
 };
+
+// GetServerSideProps
+export const getServerSideProps = async (context) => {
+
+  const session = await getSession(context);
+
+  if (!session) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  return {
+    props: {
+      session
+    }
+  }
+}
 
 export default Documentos;

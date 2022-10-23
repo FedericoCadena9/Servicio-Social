@@ -1,3 +1,6 @@
+// Importaciones
+import { getSession } from 'next-auth/react'
+
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from "../components/TextBlock";
@@ -6,10 +9,10 @@ import Pagination from "../components/Pagination";
 // Iconos
 import { ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
-const Alumnos = () => {
+const Alumnos = ({ session }) => {
   return (
     <>
-      <MainLayout>
+      <MainLayout name={session.user.name} img={session.user.image}>
 
         {/* Título */}
         <TextBlock title={'Alumnos'} subtitle={'Visualiza los alumnos con porcentaje para realizar Servicio Social.'}>
@@ -119,5 +122,24 @@ const Alumnos = () => {
     </>
   );
 };
+
+// GetServerSideProps
+export const getServerSideProps = async (context) => {
+
+  const session = await getSession(context);
+
+  if (!session) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  return {
+    props: {
+      session
+    }
+  }
+}
 
 export default Alumnos;
