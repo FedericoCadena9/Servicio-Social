@@ -22,7 +22,7 @@ const Login = () => {
             <Head>
                 <title>Iniciar Sesión | Departamento de Convenios</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                <link rel="icon" href="./assets/icon/IconIteshu.ico" />
+                <link rel="icon" href="favicon.ico" />
             </Head>
             <div className='grid grid-cols-12 w-full h-screen bg-white dark:bg-slate-900'>
                 <div className='col-span-6'>

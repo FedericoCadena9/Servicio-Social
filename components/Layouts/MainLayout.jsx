@@ -26,7 +26,7 @@ export const MainLayout = ({ children, img, name, title }) => {
         <Head>
             <title>{title} | Departamento de Convenios</title>
             <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-            <link rel="icon" href="./assets/icon/IconIteshu.ico" />
+            <link rel="icon" href="favicon.ico" />
         </Head>
 
         <div className='font-primary transition-all'>
