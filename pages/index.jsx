@@ -1,6 +1,7 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
 import Link from "next/link";
+import Head from 'next/head'
 
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
@@ -16,7 +17,7 @@ const Dependencias = ({ session }) => {
     <>
       {
         session ? (
-          <MainLayout name={session.user.name} img={session.user.image}>
+          <MainLayout title={'Dependencias'} name={session.user.name} img={session.user.image}>
 
             {/* Título */}
             <TextBlock title={'Dependencias'} subtitle={'123 resultados encontrados'}>

@@ -1,5 +1,6 @@
 // Importaciones
 import Image from 'next/image'
+import Head from 'next/head'
 import { signOut } from 'next-auth/react';
 
 //Importaciones de Componentes
@@ -19,8 +20,15 @@ import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { DarkModeToggle } from '../DarkModeToggle';
 
-export const MainLayout = ({ children, img, name }) => {
+export const MainLayout = ({ children, img, name, title }) => {
     return (
+        <>
+        <Head>
+            <title>{title} | Departamento de Convenios</title>
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            <link rel="icon" href="./assets/icon/IconIteshu.ico" />
+        </Head>
+
         <div className='font-primary transition-all'>
             <div className="min-h-screen bg-white dark:bg-gray-900">
 
@@ -138,6 +146,6 @@ export const MainLayout = ({ children, img, name }) => {
                 </div>
                 <div className="fixed inset-0 z-10 w-screen h-screen bg-black bg-opacity-25 md:hidden"></div>
             </div>
-        </div>
+        </div></>
     );
 };

@@ -1,5 +1,6 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
+import Head from 'next/head'
 
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
@@ -12,7 +13,7 @@ import { ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, Mag
 const Alumnos = ({ session }) => {
   return (
     <>
-      <MainLayout name={session.user.name} img={session.user.image}>
+      <MainLayout title={'Alumnos'} name={session.user.name} img={session.user.image}>
 
         {/* Título */}
         <TextBlock title={'Alumnos'} subtitle={'Visualiza los alumnos con porcentaje para realizar Servicio Social.'}>

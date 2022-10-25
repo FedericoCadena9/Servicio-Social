@@ -1,5 +1,6 @@
 // Importaciones
-import { getSession } from 'next-auth/react'
+import { getSession } from 'next-auth/react';
+import Head from 'next/head';
 
 // Importaciones de Componentes
 import { DocumentCard } from "../components/DocumentCard";
@@ -12,7 +13,7 @@ import { DocumentTextIcon } from '@heroicons/react/24/solid'
 const Documentos = ({ session }) => {
   return (
     <>
-      <MainLayout name={session.user.name} img={session.user.image}>
+      <MainLayout title={'Documentos'} name={session.user.name} img={session.user.image}>
         <div className="grid grid-cols-9 min-h-screen">
           <div className="col-span-6">
 

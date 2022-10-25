@@ -1,5 +1,6 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
+import Head from 'next/head'
 
 // Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
@@ -12,7 +13,7 @@ import { TrashIcon, PencilSquareIcon, MagnifyingGlassIcon, FunnelIcon, ChevronDo
 
 const Users = ({ session }) => {
     return (
-        <MainLayout name={session.user.name} img={session.user.image}>
+        <MainLayout title={'Usuarios'} name={session.user.name} img={session.user.image}>
 
             {/* Titulo y contenido */}
             <TextBlock title={'Usuarios'} subtitle={'Todos los usuarios registrados tendrán acceso al panel.'}>

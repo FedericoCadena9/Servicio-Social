@@ -10,7 +10,7 @@ const agregarDependencia = ({ session }) => {
 
     return (
         <>
-            <MainLayout name={session.user.name} img={session.user.image}>
+            <MainLayout title={'Agregar Dependencia'} name={session.user.name} img={session.user.image}>
                 <div className="relative">
 
                     {/* Titulo y Botones */}
