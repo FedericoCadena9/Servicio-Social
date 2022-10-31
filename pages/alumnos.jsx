@@ -1,6 +1,5 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
-import Head from 'next/head'
 
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";

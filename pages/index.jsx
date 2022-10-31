@@ -1,12 +1,13 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
 import Link from "next/link";
-import Head from 'next/head'
 
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from "../components/TextBlock";
 import Pagination from "../components/Pagination";
+
+import data from "../database/data.json";
 
 // Iconos
 import { ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
@@ -88,29 +89,9 @@ const Dependencias = ({ session }) => {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-gray-200 bg-white">
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
-                              <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                                <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                              </td>
-                              <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100">14P21-6UNF021-SSA</td>
-                              <td className="whitespace-nowrap px-3 py-4 ">Seguimiento de actividades de la Academia...</td>
-                              <td className="whitespace-nowrap px-3 py-4 ">Instituto Tecnológico Superior de Huichapan</td>
-                              <td className="whitespace-nowrap px-3 py-4 ">
-                                <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
-                                  Arquitectura
-                                </span>
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4">
-                                <div className="gap-2 flex items-center text-xs rounded-full px-2 py-1 bg-green-100 text-green-500 font-medium dark:bg-green-900/40 dark:text-green-400">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                                  <span>Vigente</span>
-                                </div>
-                              </td>
-                              <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
-                                <PencilSquareIcon className="w-5 h-5" />
-                                <TrashIcon className="w-5 h-5" />
-                              </td>
-                            </tr>
+                            {
+                              data.map((item, i) => <Row {...item} key={i} />)
+                            }
                           </tbody>
                         </table>
                       </div>
@@ -131,6 +112,35 @@ const Dependencias = ({ session }) => {
         )
       }
     </>
+  );
+};
+
+// Función de Filas de Dependencias
+const Row = ({ nombre_programa, clave_programa, institucion, objetivo, actividades, perfiles, director_general, responsable_area, telefono, correo, domicilio }) => {
+  return (
+    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
+      <td className="relative w-12 px-6 sm:w-16 sm:px-8">
+        <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+      </td>
+      <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100"> {clave_programa || 'Desconocido'} </td>
+      <td className="whitespace-nowrap px-3 py-4 "> {nombre_programa} </td>
+      <td className="whitespace-nowrap px-3 py-4 "> {institucion} </td>
+      <td className="whitespace-nowrap px-3 py-4 ">
+        <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
+          {perfiles}
+        </span>
+      </td>
+      <td className="whitespace-nowrap px-3 py-4">
+        <div className="gap-2 flex items-center text-xs rounded-full px-2 py-1 bg-green-100 text-green-500 font-medium dark:bg-green-900/40 dark:text-green-400">
+          <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+          <span>Vigente</span>
+        </div>
+      </td>
+      <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
+        <PencilSquareIcon className="w-5 h-5" />
+        <TrashIcon className="w-5 h-5" />
+      </td>
+    </tr>
   );
 };
 
