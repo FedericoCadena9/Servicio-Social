@@ -21,10 +21,12 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { DarkModeToggle } from '../DarkModeToggle';
 
 export const MainLayout = ({ children, img, name, title }) => {
+
+    const tabTitle = `${title} | Servicio Social ITESHU`
     return (
         <>
             <Head>
-                <title>{title} | Departamento de Convenios</title>
+                <title>{tabTitle}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <link rel="icon" href="favicon.ico" />
             </Head>

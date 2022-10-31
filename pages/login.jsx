@@ -17,10 +17,12 @@ const Login = () => {
         router.push('/')
     }
 
+    const tabTitle = `Iniciar Sesión | Servicio Social ITESHU`
+
     return (
         <>
             <Head>
-                <title>Iniciar Sesión | Departamento de Convenios</title>
+                <title> {tabTitle} </title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <link rel="icon" href="favicon.ico" />
             </Head>
