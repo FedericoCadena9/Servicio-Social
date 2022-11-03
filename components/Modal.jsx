@@ -20,9 +20,9 @@ export const Modal = () => {
       {/* Modal */}
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <label htmlFor='my-modal' className="modal">
-        <label htmlFor='' className="!p-0 modal-box relative max-w-3xl h-4/6 bg-white">
+        <label htmlFor='' className="!p-0 modal-box relative max-w-3xl h-4/6 bg-white dark:bg-gray-800">
           {/* Cabecera */}
-          <header className='absolute top-0 px-6 py-5 flex items-center justify-between w-full bg-white border-gray-200 border h-20 text-gray-800'>
+          <header className='absolute top-0 px-6 py-5 flex items-center justify-between w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-500 border h-20 text-gray-800 dark:text-white'>
             <div className='flex items-center gap-4'>
               <UserIcon className='w-6 h-6 font-normal' />
               <div className='text-lg font-medium'>Añadir Nuevo Usuario</div>
@@ -40,7 +40,7 @@ export const Modal = () => {
           </div>
 
 
-          <div className="modal-action items-center justify-between absolute bottom-0 flex h-20 w-full px-6 py-5 bg-gray-50">
+          <div className="modal-action items-center justify-between absolute bottom-0 flex h-20 w-full px-6 py-5 bg-gray-50 dark:bg-gray-800">
             {/* Botón de Cancelar */}
             <label htmlFor="my-modal" className="btn btn-outline justify-end">Cancelar</label>
 
