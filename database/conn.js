@@ -10,13 +10,13 @@ const connectMongo = async () => {
 
         // Condición para verificar si la conexión fue exitosa
         if(connection.readyState === 1){
-            console.log('Database connected');
+            console.log('Base de Datos conectada');
         }
 
     } catch (error) {
 
         // En caso de error, se muestra en consola
-        return Promise.reject(error);
+        return Promise.reject("error");
     }
 }
 
