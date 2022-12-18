@@ -1,5 +1,6 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
+import { useRouter } from 'next/router';
 
 //Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
@@ -8,23 +9,51 @@ import Pagination from "../components/Pagination";
 
 // Iconos
 import { ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { baseUrl, dataApi } from 'utils/dataApi';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-const Alumnos = ({ session }) => {
+const Alumnos = ({ session, alumnos }) => {
+
+  console.log(alumnos);
+
+  const router = useRouter();
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
+  const deleteAlumno = async (id) => {
+    const response = await fetch(`${baseUrl}/alumnos/${id}`, {
+      method: 'DELETE',
+    })
+
+    if (!response.ok) {
+      console.log('Error al eliminar');
+    } else {
+      console.log('Eliminado');
+      refreshData();
+    }
+  }
+
+  console.log(alumnos);
   return (
     <>
       <MainLayout title={'Alumnos'} name={session.user.name} img={session.user.image}>
 
         {/* Título */}
         <TextBlock title={'Alumnos'} subtitle={'Visualiza los alumnos con porcentaje para realizar Servicio Social.'}>
-          <button className='btn btn-primary'>
-            <PlusIcon className='w-5 h-5 mr-2' />
-            <span>Agregar Alumno</span>
-          </button>
+          <Link href={'/alumnos/nuevo'}>
+            <button className='btn btn-primary'>
+              <PlusIcon className='w-5 h-5 mr-2' />
+              <span>Agregar Alumno</span>
+            </button>
+          </Link>
         </TextBlock>
 
 
         <div className=" w-full px-8 mt-10 ">
-          <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
+          <div className="flex justify-end pb-4 bg-white dark:bg-gray-900">
 
             {/* Filtros */}
             <div>
@@ -53,15 +82,6 @@ const Alumnos = ({ session }) => {
               </div>
             </div>
 
-            {/* Input de Buscar */}
-            <label htmlFor="table-search" className="sr-only">Buscar</label>
-            <div className="relative">
-              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              </div>
-              <input type="search" id="table-search-users" className="block p-2.5 pl-10 w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
-            </div>
-
           </div>
 
           {/* Tabla */}
@@ -73,37 +93,69 @@ const Alumnos = ({ session }) => {
                     <table className="min-w-full table-auto divide-y divide-gray-300 dark:divide-gray-500 text-gray-600 dark:text-gray-400 text-sm">
                       <thead className="bg-gray-50 dark:bg-gray-700 dark:text-gray-300 text-gray-900 text-sm">
                         <tr>
-                          <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
-                            <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                          </th>
-                          <th scope="col" className="py-8 pr-3 text-left font-semibold">Matrícula</th>
+                          <th scope="col" className="py-8 px-8 text-left font-semibold">Matrícula</th>
                           <th scope="col" className="px-8 py-3.5 text-left font-semibold ">Apellido Paterno</th>
                           <th scope="col" className="px-8 py-3.5 text-left font-semibold">Apellido Materno</th>
                           <th scope="col" className="px-8 py-3.5 text-left font-semibold">Nombre(s)</th>
-                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Correo Elctrónico</th>
-                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Carrera</th>
                           <th scope="col" className="px-8 py-3.5 text-left font-semibold">Género</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Edad</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Teléfono</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Correo Electrónico</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Comunidad</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Discapacidad</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Lengua Indigena</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Modalidad</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Semestre</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Carrera</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Verano</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Creditos</th>
+                          <th scope="col" className="px-8 py-3.5 text-left font-semibold">Acciones</th>
 
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 bg-white">
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
-                          <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                            <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                          </td>
-                          <td className="whitespace-nowrap py-4 pr-8 text-sm font-medium text-gray-900 dark:text-gray-100">19021089</td>
-                          <td className="whitespace-nowrap px-8 py-4 ">Cadena</td>
-                          <td className="whitespace-nowrap px-8 py-4 ">López</td>
-                          <td className="whitespace-nowrap px-8 py-4 ">Héctor Federico</td>
-                          <td className="whitespace-nowrap px-8 py-4 ">a19021089@iteshu.edu.mx</td>
-                          <td className="whitespace-nowrap px-8 py-4 ">Sistemas Computacionales</td>
-                          <td className="whitespace-nowrap px-8 py-4 ">Masculino</td>
+                        {/* {alumnos.map((alumno) => (
 
-                          <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
-                            <PencilSquareIcon className="w-5 h-5" />
-                            <TrashIcon className="w-5 h-5" />
-                          </td>
-                        </tr>
+                          <tr key={alumno.attributes.matricula} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
+
+                            <td className="whitespace-nowrap py-4 px-8 text-sm font-medium text-gray-900 dark:text-gray-100">{alumno.attributes.matricula}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.apellidoPaterno}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.apellidoMaterno}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.nombres}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.correo}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.telefono}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.genero}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{`${alumno.attributes.presentaVerano}`}</td>
+                            <td className="whitespace-nowrap px-8 py-4 ">{alumno.attributes.creditos}</td>
+
+                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
+                              <Link href={`/alumnos/${alumno.attributes.matricula}`}  >
+                                <PencilSquareIcon className="w-5 h-5 cursor-pointer" />
+                              </Link>
+                              <label htmlFor="deleteAlumnoModal">
+
+                                <TrashIcon className="w-5 h-5 cursor-pointer" />
+                              </label>
+
+                              <input type="checkbox" id="deleteAlumnoModal" className="modal-toggle" />
+                              <div className="modal modal-bottom sm:modal-middle">
+                                <div className="modal-box">
+                                  <h3 className="font-bold text-lg">¿Estás seguro que deseas eliminar este elemento?</h3>
+                                  <p className="py-4"> Esta acción no se puede deshacer.</p>
+                                  <div className="modal-action">
+                                    <label htmlFor="deleteAlumnoModal" className="btn">Cancelar</label>
+                                    <label onClick={() => deleteAlumno(alumno.id)} htmlFor="deleteAlumnoModal" className="btn">Aceptar</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+
+
+
+
+                        ))
+                        } */}
                       </tbody>
                     </table>
                   </div>
@@ -118,6 +170,9 @@ const Alumnos = ({ session }) => {
         <Pagination />
 
 
+
+
+
       </MainLayout>
     </>
   );
@@ -128,6 +183,8 @@ export const getServerSideProps = async (context) => {
 
   const session = await getSession(context);
 
+  const alumnos = await dataApi(`${baseUrl}/alumnos`);
+
   if (!session) return {
     redirect: {
       destination: '/login',
@@ -137,7 +194,8 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      session
+      session,
+      alumnos: alumnos?.data
     }
   }
 }

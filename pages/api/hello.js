@@ -1,5 +1,5 @@
 // Endpoint de la conexión a la base de datos para traer los datos a NextJS
-import connectMongo from '../../database/conn';
+import connectMongo from 'database/conn';
 
 export default async function handler(req, res) {
     

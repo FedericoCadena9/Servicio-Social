@@ -3,14 +3,12 @@ import connectMongo from "database/conn";
 
 //Importar Controlador de Dependencias
 import {
-  getDependencias,
-  postDependencia,
+  getDependencia,
   putDependencia,
   deleteDependencia,
 } from "controllers/dependenciaController";
 
 export default async function handler(req, res) {
-  
   // Conexión a la base de datos
   connectMongo().catch(() =>
     res.status(405).json({ message: "Error al conectar a la base de datos" })
@@ -23,11 +21,7 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       // Respuesta de la API
-      getDependencias(req, res);
-      break;
-    case "POST":
-      // Respuesta de la API
-      postDependencia(req, res);
+      getDependencia(req, res);
       break;
     case "PUT":
       // Respuesta de la API

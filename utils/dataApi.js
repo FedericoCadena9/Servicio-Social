@@ -1,7 +1,10 @@
-const baseUrl = process.env.BASE_URL;
+import axios from 'axios';
 
-export const getDependencias = async () => {
-  const res = await fetch(`${baseUrl}/api/dependencias`);
-  const data = await res.json();
-  return data;
-};
+export const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}`;
+
+export const dataApi = async (url) => {
+    const {data} = await axios.get((url));
+
+    return data;
+}
+

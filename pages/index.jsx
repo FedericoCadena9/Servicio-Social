@@ -1,18 +1,29 @@
 // Importaciones
 import { getSession } from 'next-auth/react'
 import Link from "next/link";
+import { useRouter } from 'next/router';
+
 
 //Importaciones de Componentes
-import { MainLayout } from "../components/Layouts/MainLayout";
-import { TextBlock } from "../components/TextBlock";
-import Pagination from "../components/Pagination";
+import { MainLayout } from "components/Layouts/MainLayout";
+import { TextBlock } from "components/TextBlock";
+import Pagination from "components/Pagination";
 
-import data from "../database/data.json";
+import { baseUrl, dataApi } from 'utils/dataApi';
+
 
 // Iconos
 import { ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { getDependencias } from 'utils/dataApi';
 
-const Dependencias = ({ session }) => {
+const Dependencias = ({ session, dependencias }) => {
+
+
+
+  // Función para elirminar dependencias
+  const deleteDependencia = async () => {
+    console.log('Eliminando dependencia');
+  }
 
   return (
     <>
@@ -22,7 +33,7 @@ const Dependencias = ({ session }) => {
 
             {/* Título */}
             <TextBlock title={'Dependencias'} subtitle={'123 resultados encontrados'}>
-              <Link href={'/agregarDependencia'}>
+              <Link href={'/dependencia/agregarDependencia'}>
                 <button className='btn btn-primary'>
                   <PlusIcon className='w-5 h-5 mr-2' />
                   <span>Agregar Dependencia</span>
@@ -89,9 +100,9 @@ const Dependencias = ({ session }) => {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-gray-200 bg-white">
-                            {
-                              data.map((item, i) => <Row {...item} key={i} />)
-                            }
+                            {/* {
+                              dependencias.map((item, i) => <Row {...item} key={i} />)
+                            } */}
                           </tbody>
                         </table>
                       </div>
@@ -102,9 +113,7 @@ const Dependencias = ({ session }) => {
 
             </div>
 
-
             <Pagination />
-
 
           </MainLayout>
         ) : (
@@ -116,39 +125,68 @@ const Dependencias = ({ session }) => {
 };
 
 // Función de Filas de Dependencias
-const Row = ({ nombre_programa, clave_programa, institucion, objetivo, actividades, perfiles, director_general, responsable_area, telefono, correo, domicilio }) => {
+const Row = ({ _id, nombrePrograma, clavePrograma, institucion, objetivo, actividades, perfiles, directorGeneral, responsableArea, telefono, correo, domicilio, isVigente }) => {
+  // Rutas
+  const router = useRouter();
+
+  // onClick={() => router.push(`/dependencia/${_id}`)}
   return (
-    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
-      <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-        <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-      </td>
-      <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100"> {clave_programa || 'Desconocido'} </td>
-      <td className="whitespace-nowrap px-3 py-4 "> {nombre_programa} </td>
-      <td className="whitespace-nowrap px-3 py-4 "> {institucion} </td>
-      <td className="whitespace-nowrap px-3 py-4 ">
-        <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
-          {perfiles}
-        </span>
-      </td>
-      <td className="whitespace-nowrap px-3 py-4">
-        <div className="gap-2 flex items-center text-xs rounded-full px-2 py-1 bg-green-100 text-green-500 font-medium dark:bg-green-900/40 dark:text-green-400">
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-          <span>Vigente</span>
+    <>
+      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-slate-700 transition  cursor-pointer ">
+        <td className="relative w-12 px-6 sm:w-16 sm:px-8">
+          <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+        </td>
+        <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100"> {clavePrograma || 'Desconocido'} </td>
+        <td className="whitespace-nowrap px-3 py-4 "> {nombrePrograma} </td>
+        <td className="whitespace-nowrap px-3 py-4 "> {institucion} </td>
+        <td className="whitespace-nowrap px-3 py-4 ">
+          <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
+            {/* {perfiles[0]} */}
+          </span>
+        </td>
+        <td className="whitespace-nowrap px-3 py-4">
+          <div className={`gap-2 flex items-center text-xs rounded-full px-2 py-1 font-medium ${isVigente ? 'bg-green-100 text-green-500  dark:bg-green-900/40 dark:text-green-400' : 'bg-red-100 text-red-500  dark:bg-red-900/30 dark:text-red-400'}`}>
+            <div className={`w-1.5 h-1.5 rounded-full ${isVigente ? 'bg-green-500' : 'bg-red-600'}`}></div>
+            <span>{isVigente ? 'Vigente' : 'No Vigente'}</span>
+          </div>
+        </td>
+        <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3 z-20">
+          <PencilSquareIcon className="w-5 h-5" />
+          <label htmlFor="modalDelete" className="btn btn-ghost">
+            <TrashIcon className="w-5 h-5" />
+          </label>
+        </td>
+      </tr>
+
+      {/* Eliminar Modal */}
+      <input type="checkbox" id="modalDelete" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-white">
+          <h3 className="font-bold text-lg text-slate-900">Confirmación</h3>
+          <p className="py-4 text-gray-600">¿Estás seguro de querer borrar este elemento?</p>
+          <div className="modal-action gap-2">
+            <label htmlFor="modalDelete" className="btn btn-outline text-gray-500">
+              <span> Cancelar</span>
+            </label>
+            <label  htmlFor="modalDelete" className="btn-error	btn gap-2">
+              <TrashIcon className="w-5 h-5" />
+              <span> Eliminar</span>
+            </label>
+
+          </div>
         </div>
-      </td>
-      <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
-        <PencilSquareIcon className="w-5 h-5" />
-        <TrashIcon className="w-5 h-5" />
-      </td>
-    </tr>
+      </div>
+    </>
   );
 };
 
 // GetServerSideProps
 export const getServerSideProps = async (context) => {
 
+  // Constante que guarda la sesión del usuario
   const session = await getSession(context);
 
+  // Si no hay sesión, redirecciona al login
   if (!session) return {
     redirect: {
       destination: '/login',
@@ -156,9 +194,13 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  // Constante que guarda la información de la Base de Datos para consumir en el Frontend
+  const dependencias = await dataApi(`${baseUrl}/alumnos`);
+
   return {
     props: {
-      session
+      session,
+      dependencias,
     }
   }
 }
