@@ -116,10 +116,10 @@ function Filter() {
                                 <Stack spacing={'24px'}>
                                     <Box className='mt-2 space-y-2'>
                                         <InputGroup>
-                                            <InputLeftElement
+                                            {/* <InputLeftElement
                                                 pointerEvents='none'
                                                 children={<MagnifyingGlassIcon className='w-5 h-5 text-gray-400' />}
-                                            />
+                                            /> */}
                                             <Input className='!text-sm' type='text' placeholder='Buscar alumno' />
                                         </InputGroup>
                                         <Accordion allowToggle  >
