@@ -60,7 +60,7 @@ export const MainLayout = ({ children, img, name, title }) => {
                         {/* Menu de Navegación */}
                         <nav className="mt-20 px-8 space-y-5" aria-label="Menú de Navgación">
                             <ButtonMenu href={'/'} text="Dependencias" icon={<Squares2X2Icon className="w-5 h-5" />} />
-                            <ButtonMenu href={'/documentos'} text="Documentos" icon={<DocumentTextIcon className="w-5 h-5" />} />
+                            {/* <ButtonMenu href={'/documentos'} text="Documentos" icon={<DocumentTextIcon className="w-5 h-5" />} /> */}
                             <ButtonMenu href={'/alumnos'} text="Alumnos" icon={<AcademicCapIcon className="w-5 h-5" />} />
                             <ButtonMenu href={'/users'} text="Usuarios" icon={<UsersIcon className="w-5 h-5" />} />
                         </nav>

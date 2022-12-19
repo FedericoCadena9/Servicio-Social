@@ -4,58 +4,87 @@ import { getSession } from 'next-auth/react'
 // Importaciones de Componentes
 import { MainLayout } from "../components/Layouts/MainLayout";
 import { TextBlock } from '../components/TextBlock'
-import { Modal } from '../components/Modal';
-import Pagination from '../components/Pagination';
 
 //Iconos
-import { TrashIcon, PencilSquareIcon, MagnifyingGlassIcon, FunnelIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { addUser, deleteUser, getUsers } from 'utils/strapi/users';
+import { useRouter } from 'next/router';
 
-const Users = ({ session }) => {
+import ModalDelete from 'components/usuarios/ModalDelete';
+
+const Users = ({ session, users }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const {
+        handleSubmit,
+        register,
+        formState: { errors, isSubmitting },
+    } = useForm()
+
+    const router = useRouter();
+
+    const refreshData = () => {
+        router.replace(router.asPath);
+    }
+
+    // Función para Agregar Usuario
+    async function onSubmit(values) {
+        await addUser(values);
+        onClose();
+        refreshData()
+    }
+
+    console.log(users);
+
     return (
         <MainLayout title={'Usuarios'} name={session.user.name} img={session.user.image}>
 
             {/* Titulo y contenido */}
             <TextBlock title={'Usuarios'} subtitle={'Todos los usuarios registrados tendrán acceso al panel.'}>
-                <Modal />
+                <Button onClick={onOpen} className="btn-primary btn !bg-emerald-600 !font-normal">Nuevo Usuario</Button>
+
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <ModalHeader>Invitar nuevo Usuario</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
+                                {/* Correo */}
+
+                                <FormControl className='w-full' isInvalid={errors.correo}>
+                                    <FormLabel htmlFor='correo'>Correo</FormLabel>
+                                    <Input
+                                        id='correo'
+                                        placeholder='Ingresar correo electrónico'
+                                        {...register('correo', {
+                                            required: 'Este campo es obligatorio',
+                                            pattern: {
+                                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                message: 'El correo no es válido'
+                                            }
+                                        })}
+                                    />
+                                    <FormErrorMessage>
+                                        {errors?.correo?.message}
+                                    </FormErrorMessage>
+                                </FormControl>
+
+                            </ModalBody>
+
+                            <ModalFooter>
+                                <Button variant='ghost' mr={3} >
+                                    Cerrar
+                                </Button>
+                                <Button className='btn btn-primary !bg-emerald-600' isLoading={isSubmitting} type="submit">Agregar Usuario</Button>
+                            </ModalFooter>
+                        </form>
+                    </ModalContent>
+                </Modal>
             </TextBlock>
 
             <div className=" w-full px-8 mt-10 ">
-                <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
-
-                    {/* Filtros */}
-                    <div>
-                        <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-                            <FunnelIcon className="mr-2 w-4 h-4 text-gray-400" />
-                            Filtros
-                            <ChevronDownIcon className="w-4 h-4 ml-2" />
-                        </button>
-                        <div id="dropdownAction" className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom">
-                            <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
-                                <li>
-                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate account</a>
-                                </li>
-                            </ul>
-                            <div className="py-1">
-                                <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete User</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Buscador */}
-                    <label htmlFor="table-search" className="sr-only">Buscar</label>
-                    <div className="relative">
-                        <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                            <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                        </div>
-                        <input type="search" id="table-search-users" className="block p-2.5 pl-10 w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
-                    </div>
-                </div>
 
                 {/* Tabla */}
                 <div className="">
@@ -66,32 +95,26 @@ const Users = ({ session }) => {
                                     <table className="min-w-full table-auto divide-y divide-gray-300 dark:divide-gray-500 text-gray-600 dark:text-gray-400 text-sm">
                                         <thead className="bg-gray-50 dark:bg-gray-700 dark:text-gray-300 text-gray-900 text-sm">
                                             <tr>
-                                                <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
-                                                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                </th>
-                                                <th scope="col" className="py-3.5 pr-3 text-left font-semibold">Nombre</th>
-                                                <th scope="col" className="px-3 py-3.5 text-left font-semibold ">Correo Electrónico</th>
+                                                <th scope="col" className="px-8 py-3.5 text-left font-semibold ">Correo Electrónico</th>
                                                 <th scope="col" className="px-3 py-3.5 text-left font-semibold">Rol</th>
                                                 <th scope="col" className="px-3 py-3.5 text-left font-semibold">Acción</th>
 
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200 bg-white">
-                                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
-                                                <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                                                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                </td>
-                                                <td className="whitespace-nowrap py-4 pr-3">Federico Cadena</td>
-                                                <td className="whitespace-nowrap px-3 py-4 ">a19021029@iteshu.edu.mx</td>
-                                                <td className="whitespace-nowrap px-3 py-4 ">
-                                                    <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
-                                                        Administrador
-                                                    </span>
-                                                </td>
-                                                <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex items-center space-x-3">
-                                                    <TrashIcon className="w-5 h-5" />
-                                                </td>
-                                            </tr>
+                                            {users.map((user) => (
+                                                <tr key={user.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-slate-100/80 dark:hover:bg-gray-600 cursor-pointer ">
+                                                    <td className="whitespace-nowrap px-8 py-4 ">{user?.attributes.correo}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 ">
+                                                        <span className="text-xs rounded-full px-2 py-1 bg-orange-200/75 text-orange-500 font-medium dark:bg-orange-900/40 dark:text-orange-400">
+                                                            {user?.attributes.rol}
+                                                        </span>
+                                                    </td>
+                                                    <td className="whitespace-nowrap px-3 py-4 ">
+                                                        <ModalDelete deleteUser={() => deleteUser(user.id)} />
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -100,9 +123,7 @@ const Users = ({ session }) => {
                     </div>
                 </div>
             </div>
-
-            <Pagination />
-        </MainLayout>
+        </MainLayout >
     )
 }
 
@@ -110,6 +131,9 @@ const Users = ({ session }) => {
 export const getServerSideProps = async (context) => {
 
     const session = await getSession(context);
+
+    const users = await getUsers();
+
 
     if (!session) return {
         redirect: {
@@ -120,7 +144,8 @@ export const getServerSideProps = async (context) => {
 
     return {
         props: {
-            session
+            session,
+            users
         }
     }
 }

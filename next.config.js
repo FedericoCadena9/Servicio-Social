@@ -5,6 +5,9 @@ const nextConfig = {
   images: {
     domains: ["lh3.googleusercontent.com"],
   },
+  env: {
+    STRAPI_API_KEY: process.env.STRAPI_API_KEY,
+  }
 }
 
 module.exports = nextConfig
