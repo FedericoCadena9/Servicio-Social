@@ -10,6 +10,7 @@ import creds from "../../aa.json"
 import { useTable } from "react-table"
 import { alumnosColumns } from "@/utils/alumnosColumns"
 import { useEffect, useMemo, useState } from "react"
+import { getSession } from 'next-auth/react'
 
 //Exportr del archivo .env las variables de entorno
 const SPREADSHEET_ID = `${process.env.NEXT_PUBLIC_SPREADSHEET_ID}`;
@@ -41,7 +42,7 @@ const appendSpreadsheet = async () => {
 };
 
 
-const Alumnos = () => {
+const Alumnos = ({ session }) => {
 
   const [dataSheet, setDataSheets] = useState([]);
 
@@ -77,7 +78,7 @@ const Alumnos = () => {
 
   return (
     <>
-      <MainLayout title={'Alumnos'}>
+      <MainLayout title={'Alumnos'} name={session.user.name} img={session.user.image} email={session.user.email}>
 
         {/* Text Block */}
         <TextBlock title={'Alumnos'} subtitle={'Visualiza los alumnos con porcentaje para realizar Servicio Social.'}>
@@ -130,6 +131,24 @@ const Alumnos = () => {
       </MainLayout>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+
+  const session = await getSession(context);
+
+  if (!session) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  return {
+    props: {
+      session
+    }
+  }
 }
 
 export default Alumnos

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
+import { signOut } from 'next-auth/react';
 
 // Imagenes
 import iteshuLogo from '@/assets/imgs/iteshuLogo.png'
@@ -19,7 +20,7 @@ import { DarkModeToggle } from '../DarkModeToggle';
 import { TextBlock } from '../TextBlock';
 
 
-export const MainLayout = ({ title, children }) => {
+export const MainLayout = ({ title, children, name, email, img }) => {
 
     const [showSidebar, setShowSidebar] = useState(false);
 
@@ -131,20 +132,20 @@ export const MainLayout = ({ title, children }) => {
 
                             {/* Avatar Dropdwon */}
                             <Dropdown
-                                arrowIcon={true}
+                                arrowIcon={true}    
                                 inline={true}
-                                label={<Avatar alt="Avatar" img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded={true} />}
+                                label={<Avatar alt="Avatar" img={img} rounded={true} />}
                             >
                                 <Dropdown.Header>
                                     <span className="block text-sm">
-                                        Bonnie Green
+                                        {name}
                                     </span>
                                     <span className="block truncate text-sm font-medium">
-                                        name@flowbite.com
+                                        {email}
                                     </span>
                                 </Dropdown.Header>
-                                <Dropdown.Item>
-                                    Sign out
+                                <Dropdown.Item onClick={() => signOut()}    >
+                                    Cerrar Sesión
                                 </Dropdown.Item>
                             </Dropdown>
                         </div>
@@ -154,7 +155,7 @@ export const MainLayout = ({ title, children }) => {
                         {children}
                     </div>
                     <div className={`${showSidebar ? 'fixed inset-0 z-10 w-screen h-screen bg-black bg-opacity-25' : ''}`}></div>
-                </div>  
+                </div>
             </div>
         </>
     )

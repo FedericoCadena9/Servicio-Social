@@ -1,12 +1,23 @@
 //Importaciones
 import Head from 'next/head'
 import Image from 'next/image'
+import { signIn, useSession } from 'next-auth/react'
+import router from 'next/router'
 
 // Logos
 import iteshuLogo from '../assets/imgs/iteshuLogo.png'
 import servicioSocialLogo from '../assets/imgs/servicioSocialLogo.png'
 
 const Login = () => {
+
+    // Obtener la sesion
+    const { data: session, status } = useSession()
+
+    // Redireccionar si ya esta autenticado
+    if (status !== 'loading' && status === 'authenticated') {
+        router.push('/')
+    }
+
     return (
         <>
             <Head>
