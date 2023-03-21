@@ -76,7 +76,7 @@ export const MainLayout = ({ title, children, name, email, img }) => {
                                             <SidebarButton href={'/'} text="Alumnos" icon={<AcademicCapIcon className="w-5 h-5" />} />
                                             <SidebarButton href={'/dependencias'} text="Dependencias" icon={<Squares2X2Icon className="w-5 h-5" />} />
                                             {/* <SidebarButton href={'/documentos'} text="Documentos" icon={<DocumentTextIcon className="w-5 h-5" />} /> */}
-                                            <SidebarButton href={'/users'} text="Usuarios" icon={<UsersIcon className="w-5 h-5" />} />
+                                            <SidebarButton href={'/usuarios'} text="Usuarios" icon={<UsersIcon className="w-5 h-5" />} />
                                         </nav>
                                     </Sidebar.ItemGroup>
                                 </Sidebar.Items>
