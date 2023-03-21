@@ -61,6 +61,6 @@ export const alumnosColumns = [
   },
   {
     Header: "¿Presenta Verano?",
-    accessor: "presentaVerano",
+    accessor: "verano",
   },
 ];

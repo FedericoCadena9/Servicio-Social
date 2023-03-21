@@ -1,7 +1,7 @@
 import { MainLayout } from "@/components/Layout/MainLayout"
 import { TextBlock } from "@/components/TextBlock"
 import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/outline"
-import { Badge, Button, Table } from "flowbite-react"
+import { Badge, Table } from "flowbite-react"
 import Link from "next/link"
 
 import { GoogleSpreadsheet } from "google-spreadsheet";
@@ -9,10 +9,33 @@ import creds from "../../aa.json"
 
 import { useTable } from "react-table"
 import { alumnosColumns } from "@/utils/alumnosColumns"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { getSession } from 'next-auth/react'
 
-//Exportr del archivo .env las variables de entorno
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  useDisclosure,
+  Input,
+  Button,
+  Select,
+  RadioGroup,
+  Stack,
+  Radio,
+  useToast,
+  Editable,
+  EditablePreview,
+  EditableInput
+} from '@chakra-ui/react'
+
+//Exportar del archivo .env las variables de entorno
 const SPREADSHEET_ID = `${process.env.NEXT_PUBLIC_SPREADSHEET_ID}`;
 const SHEET_ID = `${process.env.NEXT_PUBLIC_SHEET_ID}`;
 
@@ -20,9 +43,106 @@ const SHEET_ID = `${process.env.NEXT_PUBLIC_SHEET_ID}`;
 const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
 
 
-const appendSpreadsheet = async () => {
-  try {
+const Alumnos = ({ session, alumnos }) => {
 
+  console.log(alumnos);
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const finalRef = useRef(null)
+  const initialRef = useRef(null)
+
+  const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toast = useToast()
+
+  const handleInputChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handleSelectChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handleRadioChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const currentDate = new Date();
+    const timestamp = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
+
+    const newFormData = {
+      marcaTemporal: timestamp,
+      apellidoPaterno: event.target.elements.apellidoPaterno.value,
+      apellidoMaterno: event.target.elements.apellidoMaterno.value,
+      nombres: event.target.elements.nombres.value,
+      genero: event.target.elements.genero.value,
+      edad: event.target.elements.edad.value,
+      comunidad: event.target.elements.comunidad.value,
+      discapacidad: event.target.elements.discapacidad.value,
+      lenguaIndigena: event.target.elements.lenguaIndigena.value,
+      matricula: event.target.elements.matricula.value,
+      correo: event.target.elements.correo.value,
+      telefono: event.target.elements.telefono.value,
+      modalidad: event.target.elements.modalidad.value,
+      semestre: event.target.elements.semestre.value,
+      carrera: event.target.elements.carrera.value,
+      creditos: event.target.elements.creditos.value,
+      verano: event.target.elements.verano.value,
+    };
+
+    const allValuesEmpty = !Object.values(newFormData).some((value) => value === "");
+
+    if (allValuesEmpty != false) {
+      setFormData(newFormData);
+      await appendSpreadsheet(newFormData);
+      setIsLoading(false);
+      onClose();
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Por favor complete todos los campos.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      setIsLoading(false);
+
+      return;
+    }
+  }
+
+  const appendSpreadsheet = async (formData) => {
+    try {
+
+      //Autenticar el cliente con las credenciales de servicio
+      await doc.useServiceAccountAuth(creds);
+      //Cargar la información de la hoja de cálculo
+      await doc.loadInfo();
+
+      //Obtener la hoja de cálculo por ID
+      const sheet = doc.sheetsById[SHEET_ID];
+
+      //Añadir una fila a la hoja de cálculo
+      await sheet.addRow(formData);
+
+    } catch (e) {
+      // Manejar el error
+      console.error('Error: ', e);
+    }
+  };
+
+  const deleteRow = async (id) => {
     //Autenticar el cliente con las credenciales de servicio
     await doc.useServiceAccountAuth(creds);
     //Cargar la información de la hoja de cálculo
@@ -33,39 +153,22 @@ const appendSpreadsheet = async () => {
 
     //Obtener las filas de la hoja de cálculo
     const rows = await sheet.getRows();
-    return rows;
-  } catch (e) {
 
-    //Manejar el error
-    console.error('Error: ', e);
+    //Eliminar la fila de la hoja de cálculo
+    await rows[id].delete();
   }
-};
 
 
-const Alumnos = ({ session }) => {
 
-  const [dataSheet, setDataSheets] = useState([]);
-
-  const fetchData = async () => {
-    const result = await appendSpreadsheet();
-    // console.log(result);
-    setDataSheets(result);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  console.log('dataSheet', dataSheet);
-
+  //Header Columns que tendrá la tabla
   const columns = useMemo(() => alumnosColumns, []);
-  const data = useMemo(() => dataSheet, []);
-
-  // console.log(data);
+  //Data dinámica que tendrá la tabla
+  const data = useMemo(() => alumnos, []);
 
   const alumnosTable = useTable({
     columns,
-    data
+    data,
+    showActions: true,
   })
 
   const {
@@ -82,17 +185,165 @@ const Alumnos = ({ session }) => {
 
         {/* Text Block */}
         <TextBlock title={'Alumnos'} subtitle={'Visualiza los alumnos con porcentaje para realizar Servicio Social.'}>
-          <Link href={'/alumnos/nuevo'}>
-            <div>
-              <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 hover:dark:bg-emerald-700">
-                <PlusIcon className="mr-2 h-5 w-5" />
-                Nuevo Alumno
-              </Button>
-            </div>
-          </Link>
+
+          <Button size="lg" onClick={onOpen} className="bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 hover:dark:bg-emerald-700">
+            <PlusIcon className="mr-2 h-5 w-5" />
+            Nuevo Alumno
+          </Button>
         </TextBlock>
 
         <div>
+
+          <Modal
+            initialFocusRef={initialRef}
+            finalFocusRef={finalRef}
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <form onSubmit={handleFormSubmit}>
+              <ModalOverlay />
+              <ModalContent maxW="60rem">
+                <ModalHeader>Agregar nuevo Alumno</ModalHeader>
+                <ModalCloseButton />
+
+                <ModalBody pb={6}>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <h2>Información personal</h2>
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormControl>
+                          <FormLabel>Apellido Paterno</FormLabel>
+                          <Input type="text" name="apellidoPaterno" onChange={handleInputChange} />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Apellido Materno</FormLabel>
+                          <Input type="text" name="apellidoMaterno" onChange={handleInputChange} />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Nombre(s)</FormLabel>
+                          <Input type="text" name="nombres" onChange={handleInputChange} />
+                        </FormControl>
+                        <div>
+                          <FormLabel>Género</FormLabel>
+                          <Select placeholder='Elegir' name="genero" onChange={handleSelectChange}>
+                            <option value='Masculino'>Masculino</option>
+                            <option value='Femenino'>Femenino</option>
+                          </Select>
+                        </div>
+                        <FormControl>
+                          <FormLabel>Edad</FormLabel>
+                          <Input type="number" name="edad" onChange={handleInputChange} />
+                        </FormControl>
+                        <div>
+                          <FormLabel>Comunidad</FormLabel>
+                          <Select placeholder='Elegir' name="comunidad" onChange={handleSelectChange}>
+                            <option value='opcion1'>opcion1</option>
+                            <option value='opcion2'>opcion2</option>
+                          </Select>
+                        </div>
+                        <div>
+                          <FormLabel>Discapacidad</FormLabel>
+                          <RadioGroup name="discapacidad" onChange={(value) => handleRadioChange("discapacidad", value)}>
+                            <Stack>
+                              <Radio value='Visual'>Visual</Radio>
+                              <Radio value='Auditiva'>Auditiva</Radio>
+                              <Radio value='Motriz'>Motriz</Radio>
+                              <Radio value='No aplica'>No aplica</Radio>
+                            </Stack>
+                          </RadioGroup>
+                        </div>
+                        <div>
+                          <FormLabel>Lengua Indígena</FormLabel>
+                          <RadioGroup name="lenguaIndigena" onChange={(value) => handleRadioChange("lenguaIndigena", value)}>
+                            <Stack>
+                              <Radio value='Visual'>Visual</Radio>
+                              <Radio value='Otomi'>Otomi</Radio>
+                              <Radio value='Motriz'>Motriz</Radio>
+                              <Radio value='No aplica'>No aplica</Radio>
+                            </Stack>
+                          </RadioGroup>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h2>Información académica</h2>
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormControl>
+                          <FormLabel>Matricula</FormLabel>
+                          <Input type="text" name="matricula" onChange={handleInputChange} />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Correo Electrónico</FormLabel>
+                          <Input type="text" name="correo" onChange={handleInputChange} />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Teléfono</FormLabel>
+                          <Input type="text" name="telefono" onChange={handleInputChange} />
+                        </FormControl>
+                        <div>
+                          <FormLabel>Modalidad</FormLabel>
+                          <Select placeholder='Elegir' name="modalidad" onChange={handleSelectChange}>
+                            <option value='Escolarizada'>Escolarizada</option>
+                            <option value='Mixta'>Mixta</option>
+                          </Select>
+                        </div>
+                        <div>
+                          <FormLabel>Semestre</FormLabel>
+                          <Select placeholder='Elegir' name="semestre" onChange={handleSelectChange}>
+                            <option value='Primero'>Primero</option>
+                            <option value='Segundo'>Segundo</option>
+                            <option value='Tercero'>Tercero</option>
+                            <option value='Cuarto'>Cuarto</option>
+                            <option value='Quinto'>Quinto</option>
+                            <option value='Sexto'>Sexto</option>
+                            <option value='Séptimo'>Séptimo</option>
+                            <option value='Octavo'>Octavo</option>
+                            <option value='Noveno'>Noveno</option>
+                            <option value='Décimo'>Décimo</option>
+                            <option value='Onceavo'>Onceavo</option>
+                            <option value='Doceavo'>Doceavo</option>
+                          </Select>
+                        </div>
+                        <div>
+                          <FormLabel>Carrera</FormLabel>
+                          <Select placeholder='Elegir' name="carrera" onChange={handleSelectChange}>
+                            <option value='Ingeniería en Sistemas Computacionales'>Ingeniería en Sistemas Computacionales</option>
+                            <option value='Ingeniería en Gestión Empresarial'>Ingeniería en Gestión Empresarial</option>
+                            <option value='Ingeniería en Mecatrónica'>Ingeniería en Mecatrónica</option>
+                            <option value='Ingeniería en Energías Renovables'>Ingeniería en Energías Renovables</option>
+                          </Select>
+                        </div>
+                        <FormControl>
+                          <FormLabel>No. de Créditos</FormLabel>
+                          <Input type="text" name="creditos" onChange={handleInputChange} />
+                        </FormControl>
+                        <div>
+                          <FormLabel>¿Verano?</FormLabel>
+                          <RadioGroup name="verano" onChange={(value) => handleRadioChange("verano", value)}>
+                            <Stack>
+                              <Radio value='Si'>Si</Radio>
+                              <Radio value='No'>No</Radio>
+                              <Radio value='Tal vez'>Tal vez</Radio>
+                            </Stack>
+                          </RadioGroup>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </ModalBody>
+
+                <ModalFooter gap={2}>
+                  <Button onClick={onClose}>Cancelar</Button>
+                  <Button colorScheme="teal" type="submit" isLoading={isLoading}>
+                    Enviar
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </form>
+          </Modal>
+
 
           <div className="relative overflow-x-auto border  sm:rounded-lg">
             <table {...getTableProps()} className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -104,6 +355,11 @@ const Alumnos = ({ session }) => {
                         {column.render('Header')}
                       </th>
                     ))}
+                    {
+                      // Renderizar el encabezado de la columna de eliminación si la propiedad "delete" es verdadera
+                      <th className="px-6 py-3 font-medium text-left">Acciones</th>
+
+                    }
                   </tr>
                 ))}
               </thead>
@@ -111,14 +367,27 @@ const Alumnos = ({ session }) => {
                 {rows.map((row) => {
                   prepareRow(row)
                   return (
-                    <tr key={row} {...row.getRowProps()} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         return (
-                          <td key={cell} {...cell.getCellProps()} className="px-6 py-4">
+                          <td
+                            key={cell.getCellProps().key}
+                            {...cell.getCellProps()}
+                            className="px-6 py-4"
+                          >
                             {cell.render('Cell')}
                           </td>
-                        )
+                        );
                       })}
+                      {( // Renderizar el botón de eliminación si la propiedad "delete" es verdadera
+                        <td className="px-6 py-4">
+                          <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:bg-red-50 hover:text-red-600 p-2 rounded-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                              <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
+                            </svg>
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   )
                 }
@@ -135,6 +404,7 @@ const Alumnos = ({ session }) => {
 
 export async function getServerSideProps(context) {
 
+  //Sesión de Google
   const session = await getSession(context);
 
   if (!session) return {
@@ -144,9 +414,50 @@ export async function getServerSideProps(context) {
     }
   }
 
+  //Autenticar el cliente con las credenciales de servicio
+  await doc.useServiceAccountAuth(creds);
+  //Cargar la información de la hoja de cálculo
+  await doc.loadInfo();
+
+  //Obtener la hoja de cálculo por ID
+  const sheet = doc.sheetsById[SHEET_ID];
+
+  //Obtener las filas de la hoja de cálculo
+  const rows = await sheet.getRows();
+
+  //Array donde se guardará los datos de las Rows de Excel
+  const data = [];
+
+  //Ciclo que accederá a cada Row y mediante su atributo guardará en un objeto para ser consultado en el Client Side
+  for (let i = 0; i < rows.length; i++) {
+    const dataObj = {
+      i: i,
+      apellidoPaterno: rows[i].apellidoPaterno,
+      apellidoMaterno: rows[i].apellidoMaterno,
+      nombres: rows[i].nombres,
+      genero: rows[i].genero,
+      edad: rows[i].edad,
+      comunidad: rows[i].comunidad,
+      discapacidad: rows[i].discapacidad,
+      lenguaIndigena: rows[i].lenguaIndigena,
+      matricula: rows[i].matricula,
+      correo: rows[i].correo,
+      telefono: rows[i].telefono,
+      modalidad: rows[i].modalidad,
+      semestre: rows[i].semestre,
+      carrera: rows[i].carrera,
+      creditos: rows[i].creditos,
+      verano: rows[i].verano,
+    }
+
+    // Guardar el objeto en el array
+    data.push(dataObj);
+  }
+
   return {
     props: {
-      session
+      session,
+      alumnos: data
     }
   }
 }
